@@ -1,0 +1,36 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "schools": {
+      "kalyani-gps": {
+        "roles": {
+          ".read": "auth != null && (auth.token.email == 'kalyani.gps@gmail.com' || root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'admin')",
+          "$emailKey": {
+            ".read": "auth != null && $emailKey == auth.token.email.replace('.', ',')",
+            ".write": "auth != null && (auth.token.email == 'kalyani.gps@gmail.com' || root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'admin')",
+            ".validate": "newData.val() == 'admin' || newData.val() == 'teacher'"
+          }
+        },
+        "data": {
+          ".read": "auth != null",
+          "$key": {
+            ".write": "auth != null && (auth.token.email == 'kalyani.gps@gmail.com' || root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'admin')",
+            ".validate": "newData.hasChildren(['v', 't']) && newData.child('v').isString() && newData.child('v').val().length < 5000000"
+          }
+        },
+        "att": {
+          ".read": "auth != null",
+          "$id": {
+            ".write": "auth != null && (auth.token.email == 'kalyani.gps@gmail.com' || root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'admin' || (root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'teacher' && newData.child('email').val() == auth.token.email && (!data.exists() || data.child('email').val() == auth.token.email)))",
+            ".validate": "newData.hasChildren(['id', 'date', 'email'])"
+          }
+        },
+        "files": {
+          ".read": "auth != null",
+          ".write": "auth != null && (auth.token.email == 'kalyani.gps@gmail.com' || root.child('schools/kalyani-gps/roles/' + auth.token.email.replace('.', ',')).val() == 'admin')"
+        }
+      }
+    }
+  }
+}
